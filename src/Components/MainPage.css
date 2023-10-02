@@ -1,0 +1,25 @@
+body{
+    background-image:url('/src/images/bgimage.jpg');
+}
+
+.headerr{
+    position:relative;
+     margin-top: 0;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+.headers{
+    position: absolute;
+    right: 17px;
+    top: 10px;
+}
+.title{
+    position: absolute;
+    color:#3c009d;
+    left: 50px;
+    top: -15px;
+
+
+    
+}
