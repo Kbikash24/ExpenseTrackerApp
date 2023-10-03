@@ -2,40 +2,44 @@ import React, { useState } from "react";
 import "./LoginForm.css";
 import { BsFillPersonFill, BsFillEnvelopeFill, BsUnlock } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "../Context/AuthContext";
 
 const LoginForm = () => {
   const [action, setAction] = useState("Sign Up");
-  const [name, setname] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
+  const AuthCtx = useContext(AuthContext);
 
   const handleLoginClick = () => {
     setAction("Login");
-    setIsLogin(true)
+    setIsLogin(true);
   };
   const handleSignUpClick = () => {
-
-    setIsLogin(false)
+    setIsLogin(false);
     setAction("Sign Up");
-   
-    
   };
 
   const handleAuth = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-    
       return;
     }
 
     let url;
     let requestbody = {
+      name:name,
       email: email,
       password: password,
       returnSecureToken: true,
     };
+    if (!isLogin) {
+      requestbody.name = name;
+    }
+
     if (isLogin) {
       url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDz0pafMT_oDg5zZ7kpQLMb5kEhGfW0ZmA";
@@ -58,8 +62,13 @@ const LoginForm = () => {
           : "Registration Failed";
         throw new Error(errorMsg);
       }
-    
+
       const data = await response.json();
+
+      console.log(data);
+    
+
+      AuthCtx.login(data.idToken,isLogin ? data.displayName : name);
       navigate("/");
       setEmail("");
       setPassword("");
@@ -82,7 +91,7 @@ const LoginForm = () => {
                 <input
                   type="text"
                   placeholder="User name"
-                  onChange={(e) => setname(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   value={name}
                 />
               </div>
@@ -110,19 +119,18 @@ const LoginForm = () => {
             Lost Password? <span>Click here</span>
           </div>
           <div className="submit-container">
-          
             <button
               className={action === "Login" ? "submit gray" : "submit"}
               onClick={handleSignUpClick}
-             type="submit"
+              type="submit"
             >
-             Sign Up
+              Sign Up
             </button>
             <button
               className={action === "Sign Up" ? "submit gray" : "submit"}
               onClick={handleLoginClick}
               type="submit"
-            > 
+            >
               Login
             </button>
           </div>
