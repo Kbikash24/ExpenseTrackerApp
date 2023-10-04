@@ -116,7 +116,7 @@ const LoginForm = () => {
             </div>
           </div>
           <div className="forget-password">
-            Lost Password? <span>Click here</span>
+            Lost Password? <span onClick={()=>{(navigate('/forget'))}}>Click here</span>
           </div>
           <div className="submit-container">
             <button
