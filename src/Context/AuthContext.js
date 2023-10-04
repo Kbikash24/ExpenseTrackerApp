@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 const AuthContext = React.createContext({
   token: '',
-  user: '',
+  email: '',
   isLoggedIn: false,
   login: (token) => {},
   logout: () => {},
@@ -12,25 +12,26 @@ const AuthContext = React.createContext({
 
 export const AuthContextProvider = (props) => {
   // Get the initial token from localStorage
-  const initialToken = localStorage.getItem("token") || null;
-  const initialUser = localStorage.getItem("user") || ""; // Get the initial user's name
+  const initialToken = localStorage.getItem("token")
+  const initialEmail = localStorage.getItem(" "); // Get the initial user's name
 
   // Define the state to store the token
   const [token, setToken] = useState(initialToken);
-  const [user, setUser] = useState(initialUser);
+  const [user, setUser] = useState(initialEmail);
 
   // Check if the user is logged in based on the token
   const userLoggedIn = !!token;
 
   // Function to log in (with a token)
-  const loginHandler = (token, userName) => {
+  const loginHandler = (token,email) => {
+    let userEmail=email.replace(/[@.]/g,"")
     // Set the token and user name in state
     setToken(token);
-    setUser(userName);
+    setUser(userEmail);
 
     // Store the token and user name in localStorage
     localStorage.setItem("token", token);
-    localStorage.setItem("user", userName);
+    localStorage.setItem("email", userEmail);
     console.log("logged IN")
  
   };
@@ -43,7 +44,7 @@ export const AuthContextProvider = (props) => {
 
     // Remove the token and user name from localStorage
    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("email");
 
     console.log("Logged out");
   };

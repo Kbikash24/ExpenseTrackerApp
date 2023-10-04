@@ -68,7 +68,7 @@ const LoginForm = () => {
       console.log(data);
     
 
-      AuthCtx.login(data.idToken,isLogin ? data.displayName : name);
+      AuthCtx.login(data.idToken,data.email);
       navigate("/");
       setEmail("");
       setPassword("");

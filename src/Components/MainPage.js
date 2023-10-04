@@ -19,7 +19,7 @@ const MainPage = () => {
           {" "}
           <div className="title">
             <p className="heading">Welcome to Expense Tracker app</p>
-            <div className="buttons"><div className="profile">Profile</div>
+            <div className="buttons"><div className="profile">profile</div>
             <button className="Logout" onClick={handleLogout}>
             
               Logout
