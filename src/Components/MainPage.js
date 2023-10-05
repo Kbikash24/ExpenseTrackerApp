@@ -3,6 +3,12 @@ import "./MainPage.css";
 import { useContext } from "react";
 import AuthContext from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Header from '../Components/Expenses/Header'
+import AddTransaction from "./Expenses/AddTransacton";
+import '../Components/Expenses/Expense.css'
+import Balance from "./Expenses/Balance";
+import TransactionList from "./Expenses/TransactionList";
+import IncomeExpenses from './Expenses/IncomeExpenses'
 
 const MainPage = () => {
   const AuthCtx = useContext(AuthContext);
@@ -79,6 +85,14 @@ const MainPage = () => {
             </p>
           </div>
           <p>{error}</p>
+<div className="expense">  
+          <div className="contain">
+        <Balance />
+        <IncomeExpenses />
+        <TransactionList />
+        <AddTransaction />
+      </div></div>
+        
         </>
       ) : (
         navigate("/login")

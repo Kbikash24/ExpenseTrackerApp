@@ -5,12 +5,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import  { AuthContextProvider } from "./Context/AuthContext";
 import Profile from "./Components/Profile";
 import ForgetPassword from "./Components/ForgetPassword";
+import { GlobalProvider } from "./Context/GlobalState";
 
 
 const App = () => {
   
   return (
-    <>
+    <><GlobalProvider>
     <AuthContextProvider> <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPage />}></Route>
@@ -18,7 +19,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />}></Route>
         <Route path="/forget" element={<ForgetPassword />}></Route>
         </Routes>
-      </BrowserRouter></AuthContextProvider>
+      </BrowserRouter></AuthContextProvider></GlobalProvider>
 
      
     </>
