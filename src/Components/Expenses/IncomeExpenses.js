@@ -12,8 +12,8 @@ const IncomeExpenses = () => {
     amounts.filter(item=> item<0).reduce((acc,item)=>(acc+=item),0)*-1
   ).toFixed(2)
   return (
-<div className="inc-exp-container">
-    <div>
+<div className="inc-exp-contain">
+    <div >
         <h4>Income</h4>
         <p id='money-plus' className='money plus'>{income}</p>
     </div>

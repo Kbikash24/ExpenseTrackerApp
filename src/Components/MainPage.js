@@ -3,12 +3,12 @@ import "./MainPage.css";
 import { useContext } from "react";
 import AuthContext from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import Header from '../Components/Expenses/Header'
+
 import AddTransaction from "./Expenses/AddTransacton";
-import '../Components/Expenses/Expense.css'
+import "../Components/Expenses/Expense.css";
 import Balance from "./Expenses/Balance";
 import TransactionList from "./Expenses/TransactionList";
-import IncomeExpenses from './Expenses/IncomeExpenses'
+import IncomeExpenses from "./Expenses/IncomeExpenses";
 
 const MainPage = () => {
   const AuthCtx = useContext(AuthContext);
@@ -31,21 +31,22 @@ const MainPage = () => {
           body: JSON.stringify({
             requestType: "VERIFY_EMAIL",
             idToken: localStorage.getItem("token"),
-        
           }),
           headers: {
             "Content-Type": "application/json",
           },
-        } 
+        }
       );
-       
+
       if (res.ok) {
         const data = await res.json();
         console.log(data);
       } else {
         const data = await res.json();
         if (data && data.error && data.error.message) {
-          setError("Verification mail not sent... try again" + data.error.message);
+          setError(
+            "Verification mail not sent... try again" + data.error.message
+          );
         } else {
           setError("Some error occurred!! Please try again..");
         }
@@ -71,7 +72,10 @@ const MainPage = () => {
           <div className="display">
             <p className="p">
               Your Profile is incomplete.
-              <div className="profile-link" onClick={() => navigate("/profile")}>
+              <div
+                className="profile-link"
+                onClick={() => navigate("/profile")}
+              >
                 Complete now
               </div>
             </p>
@@ -84,15 +88,15 @@ const MainPage = () => {
               </div>
             </p>
           </div>
-          <p>{error}</p>
-<div className="expense">  
-          <div className="contain">
-        <Balance />
-        <IncomeExpenses />
-        <TransactionList />
-        <AddTransaction />
-      </div></div>
-        
+          <p className="err-dis">{error}</p>
+          <div className="expense">
+            <div className="contain">
+              <Balance />
+              <IncomeExpenses />
+              <TransactionList />
+              <AddTransaction />
+            </div>
+          </div>
         </>
       ) : (
         navigate("/login")

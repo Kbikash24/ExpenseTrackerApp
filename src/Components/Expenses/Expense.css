@@ -56,11 +56,13 @@ h4 {
 }
 
 .money.plus {
-  color: #2ecc71;
+  color: #029740;
+  font-weight: 700;
 }
 
 .money.minus {
   color: #c0392b;
+  font-weight: 700;
 }
 
 label {

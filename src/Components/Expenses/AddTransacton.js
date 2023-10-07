@@ -1,19 +1,18 @@
 import React,{useState,useContext} from 'react'
 import { GlobalContext } from '../../Context/GlobalState'
-import Transaction from './Transaction'
 import './Expense.css'
 
 const AddTransaction = () => {
     const[text, setText]=useState('')
     const [amount,setAmount]=useState(0)
-    const {AddTransaction}=useContext(GlobalContext)
+    const {addTransaction}=useContext(GlobalContext)
      const onSubmit=(e)=>{
         e.preventDefault()
         const newTransaction={
             id:Math.floor(Math.random()*100000),
             text,amount:+amount
         }
-           AddTransaction(newTransaction);
+           addTransaction(newTransaction);
            setAmount('')
            setText('')
      }
@@ -23,7 +22,7 @@ const AddTransaction = () => {
     </h3>
     <form onSubmit={onSubmit}>
         <div className='form-control'>
-            <label htmlFor ="text">Text</label>
+            <label htmlFor ="text">Description</label>
             <input type='text' value={text} onChange={(e)=>setText(e.target.value)} placeholder='Enter text...'></input>
         </div>
         <div>
