@@ -75,6 +75,53 @@ export const GlobalProvider = ({ children }) => {
       });
   };
 
+  // ... (previous code)
+
+const editTransaction = (editedTransaction) => {
+  const { id } = editedTransaction;
+
+  // Firebase PUT request to update the transaction
+  fetch(
+    `https://expensetracker-1f575-default-rtdb.firebaseio.com/userExpenses/${userEmail}/${id}.json`,
+    {
+      method: "PUT",
+      body: JSON.stringify(editedTransaction),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Something went wrong!');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log('Expense edited successfully!', data);
+
+      // Update the expenses and dispatch the edit action
+      setExpenses((prevExpenses) =>
+        prevExpenses.map((item) =>
+          item.id === id ? editedTransaction : item
+        )
+      );
+
+      dispatch({
+        type: 'EDIT_TRANSACTION',
+        payload: editedTransaction,
+      });
+    })
+    .catch((error) => {
+      console.error('Error editing expense:', error);
+      alert('Error editing expense');
+    });
+};
+
+// ... (rest of the code)
+
+  
+
   const fetchExpenses = useCallback(() => {
     fetch(
       `https://expensetracker-1f575-default-rtdb.firebaseio.com/userExpenses/${userEmail}.json`,
@@ -128,6 +175,7 @@ export const GlobalProvider = ({ children }) => {
         transactions: state.transactions,
         deleteTransaction,
         addTransaction,
+        editTransaction,
         expenses,
         csv,
       }}
