@@ -9,14 +9,27 @@ import "../Components/Expenses/Expense.css";
 import Balance from "./Expenses/Balance";
 import TransactionList from "./Expenses/TransactionList";
 import IncomeExpenses from "./Expenses/IncomeExpenses";
+import { GlobalContext } from "../Context/GlobalState";
 
 const MainPage = () => {
   const AuthCtx = useContext(AuthContext);
+  const { isDarkMode, toggleTheme, exportExpensesAsCSV, premium} =
+    useContext(GlobalContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     AuthCtx.logout();
   };
+
+  const handlePremiumClick = () => {
+    if (premium) {
+      toggleTheme(); // Show the dark mode button
+      exportExpensesAsCSV(); // Show the download button
+    } else {
+      alert('Become Premium member')
+    }
+  };
+
 
   const [error, setError] = useState("");
   const isLoggedIn = localStorage.getItem("token");
@@ -57,7 +70,7 @@ const MainPage = () => {
   };
 
   return (
-    <div className="headerr">
+    <div className={`headerr ${isDarkMode ? "dark-mode" : "light-mod"}`}>
       {isLoggedIn ? (
         <>
           <div className="title">
@@ -90,6 +103,22 @@ const MainPage = () => {
           </div>
           <p className="err-dis">{error}</p>
           <div className="expense">
+          {premium ? (
+              <div className="premium">
+                <label className="switch">
+                  <input type="checkbox" />
+                  <span className="slider round" onClick={toggleTheme}></span>
+                </label>
+                <button className="Dwnld" onClick={exportExpensesAsCSV}>
+                  Download Expenses
+                </button>
+              </div>
+            ) : (
+              <button className="premium-btn" onClick={handlePremiumClick}>
+                Premium
+              </button>
+            )}
+
             <div className="contain">
               <Balance />
               <IncomeExpenses />

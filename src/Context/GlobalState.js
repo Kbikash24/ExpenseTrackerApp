@@ -1,5 +1,6 @@
 import React, { createContext, useReducer, useEffect, useCallback, useState } from "react";
 import AppReducer from './AppReducer';
+import themeReducer from './ThemeReducer';
 
 const initialState = {
   transactions: [],
@@ -9,9 +10,49 @@ export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
+  const [themeState, themeDispatch] = useReducer(themeReducer, { isDarkMode: false }); // Initialize theme state
   const [expenses, setExpenses] = useState([]);
   const [csv, setCsv] = useState([]);
-  const userEmail = localStorage.getItem("email");
+   const userEmail = localStorage.getItem("email");
+   const [premium, setPremium]= useState(false);
+
+  const toggleTheme = () => {
+    themeDispatch({ type: "TOGGLE_THEME" }); // Dispatch the toggle theme action
+  };
+ const checkPremium = (expenses) => {
+  const totalExpense = expenses.reduce(
+    (total, expense) => {
+      if (expense.amount < 0) {
+        return total + Math.abs(expense.amount); // Consider only expenses (amounts with a negative sign)
+      }
+      return total;
+    },
+    0
+  );
+  console.log(totalExpense);
+  return totalExpense > 10000;
+};
+ 
+
+
+  const exportExpensesAsCSV = () => {
+    // Create a CSV data string from your expenses
+    const csvData = "Category,amount\n" + expenses.map((expense) => (
+      `${expense.text},${expense.amount}`
+    )).join("\n");
+
+    // Create a Blob and download link for the CSV file
+    const blob = new Blob([csvData], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "expenses.csv";
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
 
   const deleteTransaction = (id) => {
     fetch(
@@ -75,7 +116,7 @@ export const GlobalProvider = ({ children }) => {
       });
   };
 
-  // ... (previous code)
+  
 
 const editTransaction = (editedTransaction) => {
   const { id } = editedTransaction;
@@ -118,7 +159,7 @@ const editTransaction = (editedTransaction) => {
     });
 };
 
-// ... (rest of the code)
+
 
   
 
@@ -149,6 +190,8 @@ const editTransaction = (editedTransaction) => {
             setExpenses(arr);
             localStorage.setItem("allExpense", JSON.stringify(arr));
             dispatch({ type: 'SET_TRANSACTIONS', payload: arr });
+            setPremium(checkPremium(arr));
+            
           });
         } else {
           response.json().then((data) => {
@@ -167,6 +210,7 @@ const editTransaction = (editedTransaction) => {
 
   useEffect(() => {
     fetchExpenses();
+    
   }, [fetchExpenses]);
 
   return (
@@ -178,6 +222,11 @@ const editTransaction = (editedTransaction) => {
         editTransaction,
         expenses,
         csv,
+        premium,
+        toggleTheme, // Include the toggleTheme function in the context
+        isDarkMode: themeState.isDarkMode, // Include the theme state
+        exportExpensesAsCSV,
+        
       }}
     >
       {children}
